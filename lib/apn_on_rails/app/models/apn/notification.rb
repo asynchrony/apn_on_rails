@@ -17,8 +17,17 @@
 class APN::Notification < APN::Base
   include ::ActionView::Helpers::TextHelper
   extend ::ActionView::Helpers::TextHelper
-  serialize :custom_properties
-  
+
+  include Mongoid::Document
+  include ActiveModel::Validations
+
+  field :badge, :type => Integer
+  field :sound, :type => String
+  field :alert, :type => String
+  field :sent_at, :type => Date
+  field :custom_properties, :type => Hash
+  field :errors_nb, :type => Integer
+
   belongs_to :device, :class_name => 'APN::Device'
   has_one    :app,    :class_name => 'APN::App', :through => :device
   

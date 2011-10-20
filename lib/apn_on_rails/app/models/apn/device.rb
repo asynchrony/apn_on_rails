@@ -9,10 +9,16 @@
 # Example:
 #   Device.create(:token => '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz')
 class APN::Device < APN::Base
-  
+  include Mongoid::Document
+  include ActiveModel::Validations
+
+  field :token, :type => String
+  field :last_registered_at, :type => Date
+
   belongs_to :app, :class_name => 'APN::App'
   has_many :notifications, :class_name => 'APN::Notification'
-  has_many :unsent_notifications, :class_name => 'APN::Notification', :conditions => 'sent_at is null'
+
+  scope :unsent_notifications, where(:sent_at => nil)
   
   validates_uniqueness_of :token, :scope => :app_id
   validates_format_of :token, :with => /^[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}$/

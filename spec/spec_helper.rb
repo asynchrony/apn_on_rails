@@ -5,8 +5,6 @@ Dir.glob(File.join(File.dirname(__FILE__), 'extensions', '*.rb')).sort.each do |
   require f
 end
 
-require File.join(File.dirname(__FILE__), 'active_record', 'setup_ar.rb')
-
 require File.join(File.dirname(__FILE__), '..', 'lib', 'apn_on_rails')
 
 Dir.glob(File.join(File.dirname(__FILE__), 'factories', '*.rb')).sort.each do |f|

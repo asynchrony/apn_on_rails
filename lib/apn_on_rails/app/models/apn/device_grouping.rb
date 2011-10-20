@@ -1,5 +1,7 @@
 class APN::DeviceGrouping < APN::Base
-  
+  include Mongoid::Document
+  include ActiveModel::Validations
+
   belongs_to :group, :class_name => 'APN::Group'
   belongs_to :device, :class_name => 'APN::Device'
   

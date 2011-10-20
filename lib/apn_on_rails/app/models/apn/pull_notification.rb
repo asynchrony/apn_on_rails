@@ -1,4 +1,12 @@
 class APN::PullNotification < APN::Base
+  include Mongoid::Document
+  include ActiveModel::Validations
+
+  field :launch_notifiation, :type => Boolean
+  field :title, :type => String
+  field :content, :type => String
+  field :link, :type => String
+
   belongs_to :app, :class_name => 'APN::App'
   
   validates_presence_of :app_id

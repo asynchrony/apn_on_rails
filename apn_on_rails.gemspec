@@ -31,19 +31,6 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
     "VERSION",
     "apn_on_rails.gemspec",
     "autotest/discover.rb",
-    "generators/apn_migrations_generator.rb",
-    "generators/templates/apn_migrations/001_create_apn_devices.rb",
-    "generators/templates/apn_migrations/002_create_apn_notifications.rb",
-    "generators/templates/apn_migrations/003_alter_apn_devices.rb",
-    "generators/templates/apn_migrations/004_create_apn_apps.rb",
-    "generators/templates/apn_migrations/005_create_groups.rb",
-    "generators/templates/apn_migrations/006_alter_apn_groups.rb",
-    "generators/templates/apn_migrations/007_create_device_groups.rb",
-    "generators/templates/apn_migrations/008_create_apn_group_notifications.rb",
-    "generators/templates/apn_migrations/009_create_pull_notifications.rb",
-    "generators/templates/apn_migrations/010_alter_apn_notifications.rb",
-    "generators/templates/apn_migrations/011_make_device_token_index_nonunique.rb",
-    "generators/templates/apn_migrations/012_add_launch_notification_to_apn_pull_notifications.rb",
     "lib/apn_on_rails.rb",
     "lib/apn_on_rails/apn_on_rails.rb",
     "lib/apn_on_rails/app/models/apn/app.rb",
@@ -59,7 +46,6 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
     "lib/apn_on_rails/tasks/apn.rake",
     "lib/apn_on_rails/tasks/db.rake",
     "lib/apn_on_rails_tasks.rb",
-    "spec/active_record/setup_ar.rb",
     "spec/apn_on_rails/app/models/apn/app_spec.rb",
     "spec/apn_on_rails/app/models/apn/device_spec.rb",
     "spec/apn_on_rails/app/models/apn/group_notification_spec.rb",
@@ -85,7 +71,6 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Apple Push Notifications on Rails}
   s.test_files = [
-    "spec/active_record/setup_ar.rb",
     "spec/apn_on_rails/app/models/apn/app_spec.rb",
     "spec/apn_on_rails/app/models/apn/device_spec.rb",
     "spec/apn_on_rails/app/models/apn/group_notification_spec.rb",
@@ -109,33 +94,32 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
+      s.add_dependency(%q<mongoid>, ["~> 2.1.9"])
       s.add_development_dependency(%q<autotest>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.0"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
-      s.add_development_dependency(%q<actionpack>, ["~> 2.3.0"])
-      s.add_development_dependency(%q<activerecord>, ["~> 2.3.0"])
     else
+      s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
+      s.add_dependency(%q<mongoid>, ["~> 2.1.9"])
       s.add_dependency(%q<autotest>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.0"])
       s.add_dependency(%q<rcov>, [">= 0"])
-      s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
-      s.add_dependency(%q<activerecord>, ["~> 2.3.0"])
     end
   else
+    s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
+    s.add_dependency(%q<mongoid>, ["~> 2.1.9"])
     s.add_dependency(%q<autotest>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.0"])
     s.add_dependency(%q<rcov>, [">= 0"])
-    s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
-    s.add_dependency(%q<activerecord>, ["~> 2.3.0"])
   end
 end
-

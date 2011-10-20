@@ -1,8 +1,17 @@
 class APN::GroupNotification < APN::Base
   include ::ActionView::Helpers::TextHelper
   extend ::ActionView::Helpers::TextHelper
-  serialize :custom_properties
-  
+
+  include Mongoid::Document
+  include ActiveModel::Validations
+
+  field :custom_properties, :type => Hash
+  field :device_language, :type => String
+  field :sound, :type => String
+  field :alert, :type => String
+  field :badge, :type => Integer
+  field :sent_at, :type => Date
+
   belongs_to :group, :class_name => 'APN::Group'
   has_one    :app, :class_name => 'APN::App', :through => :group
   has_many   :device_groupings, :through => :group

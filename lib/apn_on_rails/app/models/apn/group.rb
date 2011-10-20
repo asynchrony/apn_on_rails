@@ -1,5 +1,9 @@
 class APN::Group < APN::Base
-  
+  include Mongoid::Document
+  include ActiveModel::Validations
+
+  field :name, :type => String
+
   belongs_to :app, :class_name => 'APN::App'
   has_many   :device_groupings, :class_name => "APN::DeviceGrouping", :dependent => :destroy
   has_many   :devices, :class_name => 'APN::Device', :through => :device_groupings

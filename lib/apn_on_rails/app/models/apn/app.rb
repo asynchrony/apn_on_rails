@@ -1,4 +1,10 @@
 class APN::App < APN::Base
+  include Mongoid::Document
+  include ActiveModel::Validations
+
+  field :apn_dev_cert, :type => String
+  field :apn_prod_cert, :type => String
+
   has_many :groups, :class_name => 'APN::Group', :dependent => :destroy
   has_many :devices, :class_name => 'APN::Device', :dependent => :destroy
   has_many :notifications, :through => :devices, :dependent => :destroy
@@ -34,7 +40,7 @@ class APN::App < APN::Base
   end
   
   def self.send_notifications_for_cert(the_cert, app_id)
-    # unless self.unsent_notifications.nil? || self.unsent_notifications.empty?
+    unless self.unsent_notifications.empty?
       if (app_id == nil)
         conditions = "app_id is null"
       else 
@@ -42,7 +48,7 @@ class APN::App < APN::Base
       end
       begin
         APN::Connection.open_for_delivery({:cert => the_cert}) do |conn, sock|
-          APN::Device.find_each(:conditions => conditions) do |dev|
+          APN::Device.all.each(:conditions => conditions) do |dev|
             dev.unsent_notifications.each do |noty|
               conn.write(noty.message_for_sending)
               noty.sent_at = Time.now
@@ -53,7 +59,7 @@ class APN::App < APN::Base
       rescue Exception => e
         log_connection_exception(e)
       end
-    # end
+    end
   end
   
   def send_group_notifications
@@ -64,7 +70,7 @@ class APN::App < APN::Base
     unless self.unsent_group_notifications.nil? || self.unsent_group_notifications.empty? 
       APN::Connection.open_for_delivery({:cert => self.cert}) do |conn, sock|
         unsent_group_notifications.each do |gnoty|
-          gnoty.devices.find_each do |device|
+          gnoty.devices.all.each do |device|
             conn.write(gnoty.message_for_sending(device))
           end
           gnoty.sent_at = Time.now
@@ -81,7 +87,7 @@ class APN::App < APN::Base
     end
     unless gnoty.nil?
       APN::Connection.open_for_delivery({:cert => self.cert}) do |conn, sock|
-        gnoty.devices.find_each do |device|
+        gnoty.devices.all.each do |device|
           conn.write(gnoty.message_for_sending(device))
         end
         gnoty.sent_at = Time.now
