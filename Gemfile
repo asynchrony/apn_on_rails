@@ -1,5 +1,4 @@
 source :gemcutter
-gem 'configatron'
 
 # Add dependencies required to use your gem here.
 # Example:

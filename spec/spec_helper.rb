@@ -13,7 +13,7 @@ Dir.glob(File.join(File.dirname(__FILE__), 'factories', '*.rb')).sort.each do |f
   require f
 end
 
-configatron.apn.cert = File.expand_path(File.join(File.dirname(__FILE__), 'rails_root', 'config', 'apple_push_notification_development.pem'))
+APN_CERT_FILE = File.expand_path(File.join(File.dirname(__FILE__), 'rails_root', 'config', 'apple_push_notification_development.pem'))
 
 RSpec.configure do |config|
   

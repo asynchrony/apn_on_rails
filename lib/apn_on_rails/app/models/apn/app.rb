@@ -1,5 +1,4 @@
 class APN::App < APN::Base
-  
   has_many :groups, :class_name => 'APN::Group', :dependent => :destroy
   has_many :devices, :class_name => 'APN::Device', :dependent => :destroy
   has_many :notifications, :through => :devices, :dependent => :destroy
@@ -31,10 +30,7 @@ class APN::App < APN::Base
     apps.each do |app|
       app.send_notifications
     end
-    if !configatron.apn.cert.blank?
-      global_cert = File.read(configatron.apn.cert)
-      send_notifications_for_cert(global_cert, nil)
-    end
+    send_notifications_for_cert(global_cert, nil)
   end
   
   def self.send_notifications_for_cert(the_cert, app_id)
@@ -57,7 +53,7 @@ class APN::App < APN::Base
       rescue Exception => e
         log_connection_exception(e)
       end
-    # end   
+    # end
   end
   
   def send_group_notifications
@@ -124,10 +120,7 @@ class APN::App < APN::Base
     apps.each do |app|
       app.process_devices
     end
-    if !configatron.apn.cert.blank?
-      global_cert = File.read(configatron.apn.cert)
-      APN::App.process_devices_for_cert(global_cert)
-    end
+    APN::App.process_devices_for_cert(global_cert)
   end
   
   def self.process_devices_for_cert(the_cert)
@@ -141,7 +134,10 @@ class APN::App < APN::Base
       end
     end 
   end
-  
+
+  def self.global_cert
+    @global_cert ||= File.read(File.join(Rails.root, "config/apple_push_notification/#{Rails.env}.pem"))
+  end
   
   protected
   def log_connection_exception(ex)

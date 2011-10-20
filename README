@@ -113,34 +113,6 @@ Now, to create the tables you need for APN on Rails, run the following task:
 
   $ ruby script/generate apn_migrations
 
-APN on Rails uses the Configatron gem, http://github.com/markbates/configatron/tree/master, 
-to configure itself. (With the change to multi-app support, the certifications are stored in the 
-database rather than in the config directory, however, it is still possible to use the default "app" and the certificates
-stored in the config directory.  For this setup, the following configurations apply.) 
-APN on Rails has the following default configurations that you change as you see fit:
-
-  # development (delivery):
-  configatron.apn.passphrase # => ''
-  configatron.apn.port # => 2195
-  configatron.apn.host # => 'gateway.sandbox.push.apple.com'
-  configatron.apn.cert #=> File.join(RAILS_ROOT, 'config', 'apple_push_notification_development.pem')
-  
-  # production (delivery):
-  configatron.apn.host # => 'gateway.push.apple.com'
-  configatron.apn.cert #=> File.join(RAILS_ROOT, 'config', 'apple_push_notification_production.pem')
-  
-  # development (feedback):
-  configatron.apn.feedback.passphrase # => ''
-  configatron.apn.feedback.port # => 2196
-  configatron.apn.feedback.host # => 'feedback.sandbox.push.apple.com'
-  configatron.apn.feedback.cert #=> File.join(RAILS_ROOT, 'config', 'apple_push_notification_development.pem')
-  
-  # production (feedback):
-  configatron.apn.feedback.host # => 'feedback.push.apple.com'
-  configatron.apn.feedback.cert #=> File.join(RAILS_ROOT, 'config', 'apple_push_notification_production.pem')
-
-That's it, now you're ready to start creating notifications.
-
 ===Upgrade Notes:
 
 If you are upgrading to a new version of APN on Rails you should always run:
