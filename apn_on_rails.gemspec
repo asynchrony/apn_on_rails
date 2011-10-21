@@ -94,7 +94,7 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
+      s.add_dependency(%q<actionpack>, ["~> 3.0"])
       s.add_dependency(%q<mongoid>, ["~> 2.0.2"])
       s.add_development_dependency(%q<autotest>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
@@ -103,7 +103,7 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.0"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
     else
-      s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
+      s.add_dependency(%q<actionpack>, ["~> 3.0"])
       s.add_dependency(%q<mongoid>, ["~> 2.0.2"])
       s.add_dependency(%q<autotest>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
@@ -113,7 +113,7 @@ easily add Apple Push Notification (iPhone) support to your Rails application.
       s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
-    s.add_dependency(%q<actionpack>, ["~> 2.3.0"])
+    s.add_dependency(%q<actionpack>, ["~> 3.0"])
     s.add_dependency(%q<mongoid>, ["~> 2.0.2"])
     s.add_dependency(%q<autotest>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
