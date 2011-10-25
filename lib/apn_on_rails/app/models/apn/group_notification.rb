@@ -13,9 +13,18 @@ class APN::GroupNotification < APN::Base
   field :sent_at, :type => Date
 
   belongs_to :group, :class_name => 'APN::Group'
-  has_one    :app, :class_name => 'APN::App', :through => :group
-  has_many   :device_groupings, :through => :group
-  
+
+  def app
+    group.app
+  end
+
+  def device_groupings
+    group.flat_map(&:device_groupings)
+  end
+
+  scope :sent, where(:sent_at.ne => nil)
+  scope :unsent, where(:sent_at => nil)
+
   validates_presence_of :group_id
   
   def devices

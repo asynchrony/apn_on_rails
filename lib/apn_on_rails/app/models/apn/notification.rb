@@ -29,8 +29,11 @@ class APN::Notification < APN::Base
   field :errors_nb, :type => Integer
 
   belongs_to :device, :class_name => 'APN::Device'
-  has_one    :app,    :class_name => 'APN::App', :through => :device
-  
+
+  def app
+    device.app
+  end
+
   # Stores the text alert message you want to send to the device.
   # 
   # If the message is over 150 characters long it will get truncated

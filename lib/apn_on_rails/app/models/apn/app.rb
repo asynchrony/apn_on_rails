@@ -7,10 +7,22 @@ class APN::App < APN::Base
 
   has_many :groups, :class_name => 'APN::Group', :dependent => :destroy
   has_many :devices, :class_name => 'APN::Device', :dependent => :destroy
-  has_many :notifications, :through => :devices, :dependent => :destroy
-  has_many :unsent_notifications, :through => :devices
-  has_many :group_notifications, :through => :groups
-  has_many :unsent_group_notifications, :through => :groups
+
+  def notifications
+    devices.flat_map(&:notifications)
+  end
+
+  def unsent_notifications
+    devices.flat_map(&:unsent_notifications)
+  end
+
+  def group_notifications
+    groups.flat_map(&:group_notifications)
+  end
+
+  def unsent_group_notifications
+    groups.flat_map(&:unsent_group_notifications)
+  end
     
   def cert
     (Rails.env == 'production' ? apn_prod_cert : apn_dev_cert)
