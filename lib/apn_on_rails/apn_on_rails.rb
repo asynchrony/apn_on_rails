@@ -33,7 +33,7 @@ module APN # :nodoc:
         APN_FEEDBACK_CERT_FILE = APN_CONFIG['feedback_cert_file'] || APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_FEEDBACK_CERT_FILE)
         APN_FEEDBACK_PASSPHRASE = APN_CONFIG['feedback_cert_password'] || APN_CONFIG['cert_password'] || '' unless defined?(APN_FEEDBACK_PASSPHRASE)
       rescue => ex
-        raise APN::Errors.ConfigFileMissingEnvironment.new(ex.message)
+        raise APN::Errors::ConfigFileMissingEnvironment.new(ex.message)
       end
       puts "initialized APN"
     end
