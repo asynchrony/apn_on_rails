@@ -1,38 +1,50 @@
 require 'socket'
 require 'openssl'
 
-rails_root = File.join(FileUtils.pwd, 'rails_root')
-if defined?(Rails.root.to_s)
-  rails_root = Rails.root.to_s
-end
 
-rails_env = 'development'
-if defined?(Rails.env)
-  rails_env = Rails.env
-end
-
-APN_HOST = (rails_env == 'production' ? 'gateway.push.apple.com' : 'gateway.sandbox.push.apple.com') unless defined?(APN_HOST)
-APN_PORT = 2195 unless defined?(APN_PORT)
-APN_CERT_FILE = File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_CERT_FILE)
-APN_PASSPHRASE = '' unless defined?(APN_PASSPHRASE)
-
-APN_FEEDBACK_HOST = (rails_env == 'production' ? 'feedback.push.apple.com' : 'feedback.sandbox.push.apple.com') unless defined?(APN_FEEDBACK_HOST)
-APN_FEEDBACK_PORT = 2196 unless defined?(APN_FEEDBACK_PORT)
-APN_FEEDBACK_CERT_FILE = File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_FEEDBACK_CERT_FILE)
-APN_FEEDBACK_PASSPHRASE = '' unless defined?(APN_FEEDBACK_PASSPHRASE)
 
 
 module APN # :nodoc:
-  
+
+  class APNRailtie < Rails::Railtie
+    initializer "load APN config" do
+      if defined?(Rails)
+        rails_env = Rails.env
+        rails_root = Rails.root
+      else
+        rails_env = 'development'
+        rails_root = File.join(FileUtils.pwd, 'rails_root')
+      end
+
+      begin
+        APN_CONFIG = YAML.load_file("#{rails_root}/config/apn.yml")[rails_env]
+      rescue => ex
+        raise ConfigFileNotFound,new(ex.message)
+      end
+
+      begin
+        APN_HOST = APN_CONFIG['host'] || (rails_env == 'production' ? 'gateway.push.apple.com' : 'gateway.sandbox.push.apple.com') unless defined?(APN_HOST)
+        APN_PORT = APN_CONFIG['port'] || 2195 unless defined?(APN_PORT)
+        APN_CERT_FILE = APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_CERT_FILE)
+        APN_PASSPHRASE = APN_CONFIG['cert_password'] || '' unless defined?(APN_PASSPHRASE)
+
+        APN_FEEDBACK_HOST = APN_CONFIG['feedback_host'] || (rails_env == 'production' ? 'feedback.push.apple.com' : 'feedback.sandbox.push.apple.com') unless defined?(APN_FEEDBACK_HOST)
+        APN_FEEDBACK_PORT = APN_CONFIG['feedback_port'] || 2196 unless defined?(APN_FEEDBACK_PORT)
+        APN_FEEDBACK_CERT_FILE = APN_CONFIG['feedback_cert_file'] || APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_FEEDBACK_CERT_FILE)
+        APN_FEEDBACK_PASSPHRASE = APN_CONFIG['feedback_cert_password'] || APN_CONFIG['cert_password'] || '' unless defined?(APN_FEEDBACK_PASSPHRASE)
+      rescue => ex
+        raise APN::Errors.ConfigFileMissingEnvironment.new(ex.message)
+      end
+      puts "initialized APN"
+    end
+  end
+
   module Errors # :nodoc:
-    
     # Raised when a notification message to Apple is longer than 256 bytes.
     class ExceededMessageSizeError < StandardError
-      
       def initialize(message) # :nodoc:
         super("The maximum size allowed for a notification payload is 256 bytes: '#{message}'")
       end
-      
     end
     
     class MissingCertificateError < StandardError
@@ -40,9 +52,20 @@ module APN # :nodoc:
         super("This app has no certificate")
       end
     end
-    
+
+    class ConfigFileNotFound < StandardError
+      def initialize(message)
+        super("The config/apn.yml file could not be found or contains errors: '#{message}'")
+      end
+    end
+
+    class ConfigFileMissingEnvironment < StandardError
+      def initialize(message)
+        super("The config/apn.yml file doesn't contain data for this environment (#{Rails.env || 'nil'}): '#{message}'")
+      end
+    end
   end # Errors
-  
+
 end # APN
 
 base = File.join(File.dirname(__FILE__), 'app', 'models', 'apn', 'base.rb')
