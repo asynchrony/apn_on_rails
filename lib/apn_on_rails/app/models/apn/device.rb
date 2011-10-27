@@ -21,7 +21,7 @@ class APN::Device < APN::Base
   scope :unsent_notifications, where(:sent_at => nil)
   
   validates_uniqueness_of :token, :scope => :app_id
-  validates_format_of :token, :with => /^[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}$/
+  validates_format_of :token, :with => /^[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}$/
   
   before_create :set_last_registered_at
   
