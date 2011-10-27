@@ -148,16 +148,21 @@ class APN::App < APN::Base
       else 
         puts "device #{device.id} -> #{device.last_registered_at} not < #{device.feedback_at}"
       end
-    end 
+    end
   end
 
   def self.global_cert
     @global_cert ||= File.read(File.join(Rails.root, "config/apple_push_notification/#{Rails.env}.pem"))
   end
   
-  protected
-  def log_connection_exception(ex)
-    puts ex.message
+  def self.log_connection_exception(ex)
+    Rails.logger.error ex.message
   end
-    
+
+  protected
+
+  def log_connection_exception(ex)
+    self.class.log_connection_exception ex
+  end
+
 end
