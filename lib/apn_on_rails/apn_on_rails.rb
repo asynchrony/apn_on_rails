@@ -23,15 +23,15 @@ module APN # :nodoc:
       end
 
       begin
-        APN_HOST = APN_CONFIG['host'] || (rails_env == 'production' ? 'gateway.push.apple.com' : 'gateway.sandbox.push.apple.com') unless defined?(APN_HOST)
-        APN_PORT = APN_CONFIG['port'] || 2195 unless defined?(APN_PORT)
-        APN_CERT_FILE = APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_CERT_FILE)
-        APN_PASSPHRASE = APN_CONFIG['cert_password'] || '' unless defined?(APN_PASSPHRASE)
+        ::APN::HOST = APN_CONFIG['host'] || (rails_env == 'production' ? 'gateway.push.apple.com' : 'gateway.sandbox.push.apple.com') unless defined?(::APN::HOST)
+        ::APN::PORT = APN_CONFIG['port'] || 2195 unless defined?(::APN::PORT)
+        ::APN::CERT_FILE = APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(::APN::CERT_FILE)
+        ::APN::PASSPHRASE = APN_CONFIG['cert_password'] || '' unless defined?(::APN::PASSPHRASE)
 
-        APN_FEEDBACK_HOST = APN_CONFIG['feedback_host'] || (rails_env == 'production' ? 'feedback.push.apple.com' : 'feedback.sandbox.push.apple.com') unless defined?(APN_FEEDBACK_HOST)
-        APN_FEEDBACK_PORT = APN_CONFIG['feedback_port'] || 2196 unless defined?(APN_FEEDBACK_PORT)
-        APN_FEEDBACK_CERT_FILE = APN_CONFIG['feedback_cert_file'] || APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(APN_FEEDBACK_CERT_FILE)
-        APN_FEEDBACK_PASSPHRASE = APN_CONFIG['feedback_cert_password'] || APN_CONFIG['cert_password'] || '' unless defined?(APN_FEEDBACK_PASSPHRASE)
+        ::APN::FEEDBACK_HOST = APN_CONFIG['feedback_host'] || (rails_env == 'production' ? 'feedback.push.apple.com' : 'feedback.sandbox.push.apple.com') unless defined?(::APN::FEEDBACK_HOST)
+        ::APN::FEEDBACK_PORT = APN_CONFIG['feedback_port'] || 2196 unless defined?(::APN::FEEDBACK_PORT)
+        ::APN::FEEDBACK_CERT_FILE = APN_CONFIG['feedback_cert_file'] || APN_CONFIG['cert_file'] || File.join(rails_root, 'config', 'apple_push_notification', "#{rails_env}.pem") unless defined?(::APN::FEEDBACK_CERT_FILE)
+        ::APN::FEEDBACK_PASSPHRASE = APN_CONFIG['feedback_cert_password'] || APN_CONFIG['cert_password'] || '' unless defined?(::APN::FEEDBACK_PASSPHRASE)
       rescue => ex
         raise APN::Errors::ConfigFileMissingEnvironment.new(ex.message)
       end

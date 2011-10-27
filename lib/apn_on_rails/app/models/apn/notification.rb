@@ -102,4 +102,4 @@ class APN::Notification < APN::Base
     APN::App.send_notifications
   end
   
-end # APN::Notification
+end

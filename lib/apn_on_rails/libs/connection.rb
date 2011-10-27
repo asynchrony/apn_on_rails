@@ -17,19 +17,19 @@ module APN
       # Yields up an SSL socket to receive feedback from.
       # The connections are close automatically.
       def open_for_feedback(options = {}, &block)
-        options = {:cert => APN_FEEDBACK_CERT_FILE,
-                   :passphrase => APN_FEEDBACK_PASSPHRASE,
-                   :host => APN_FEEDBACK_HOST,
-                   :port => APN_FEEDBACK_PORT}.merge(options)
+        options = {:cert => ::APN::FEEDBACK_CERT_FILE,
+                   :passphrase => ::APN::FEEDBACK_PASSPHRASE,
+                   :host => ::APN::FEEDBACK_HOST,
+                   :port => ::APN::FEEDBACK_PORT}.merge(options)
         open(options, &block)
       end
       
       private
       def open(options = {}, &block) # :nodoc:
-        options = {:cert => APN_CERT_FILE,
-                   :passphrase => APN_PASSPHRASE,
-                   :host => APN_HOST,
-                   :port => APN_PORT}.merge(options)
+        options = {:cert => ::APN::CERT_FILE,
+                   :passphrase => ::APN::PASSPHRASE,
+                   :host => ::APN::HOST,
+                   :port => ::APN::PORT}.merge(options)
         #cert = File.read(options[:cert])
         cert = options[:cert]
         ctx = OpenSSL::SSL::SSLContext.new
