@@ -156,7 +156,8 @@ class APN::App < APN::Base
   end
   
   def self.log_connection_exception(ex)
-    Rails.logger.error ex.message
+    ex.extend(APN::Errors)
+    Rails.logger.error "APN Exception: #{ex.class} - #{ex.message}"
   end
 
   protected
