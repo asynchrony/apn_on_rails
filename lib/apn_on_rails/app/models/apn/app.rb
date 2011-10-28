@@ -60,15 +60,10 @@ class APN::App < APN::Base
     begin
       APN::Connection.open_for_delivery({:cert => the_cert}) do |conn, sock|
         APN::Device.where(conditions).each do |dev|
-          puts "        #{__FILE__}:#{__LINE__}"
           dev.unsent_notifications.each do |noty|
-            puts "        #{__FILE__}:#{__LINE__}"
             conn.write(noty.message_for_sending)
-            puts "        #{__FILE__}:#{__LINE__}"
             noty.sent_at = Time.now
-            puts "        #{__FILE__}:#{__LINE__}"
             noty.save
-            puts "        #{__FILE__}:#{__LINE__}"
           end
         end
       end
