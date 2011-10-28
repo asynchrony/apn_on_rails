@@ -18,8 +18,6 @@ class APN::Device < APN::Base
   belongs_to :app, :class_name => 'APN::App'
   has_many :notifications, :class_name => 'APN::Notification'
 
-  scope :unsent_notifications, where(:sent_at => nil)
-  
   validates_uniqueness_of :token, :scope => :app_id
   validates_format_of :token, :with => /^[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}\s?[a-z0-9]{8}$/
   
@@ -51,5 +49,8 @@ class APN::Device < APN::Base
   def set_last_registered_at
     self.last_registered_at = Time.now #if self.last_registered_at.nil?
   end
-  
+
+  def unsent_notifications
+    notifications.where(:sent_at => nil)
+  end
 end
