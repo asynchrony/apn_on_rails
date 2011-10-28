@@ -52,14 +52,14 @@ class APN::App < APN::Base
   end
 
   def self.send_notifications_for_cert(the_cert, app_id)
-    if (app_id == nil)
-      conditions = "app_id is null"
+    conditions = if (app_id == nil)
+      { :app_id => nil }
     else
-      conditions = ["app_id = ?", app_id]
+      { :app_id => app_id }
     end
     begin
       APN::Connection.open_for_delivery({:cert => the_cert}) do |conn, sock|
-        APN::Device.where(:conditions => conditions).each do |dev|
+        APN::Device.where(conditions).each do |dev|
           puts "        #{__FILE__}:#{__LINE__}"
           dev.unsent_notifications.each do |noty|
             puts "        #{__FILE__}:#{__LINE__}"
