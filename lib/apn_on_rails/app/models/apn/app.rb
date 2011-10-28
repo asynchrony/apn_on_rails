@@ -44,7 +44,7 @@ class APN::App < APN::Base
   end
   
   def self.send_notifications
-    apps = APN::App.all 
+    apps = APN::App.all
     apps.each do |app|
       app.send_notifications
     end
@@ -59,11 +59,16 @@ class APN::App < APN::Base
     end
     begin
       APN::Connection.open_for_delivery({:cert => the_cert}) do |conn, sock|
-        APN::Device.all.each(:conditions => conditions) do |dev|
+        APN::Device.where(:conditions => conditions).each do |dev|
+          Rails.logger.error "        #{__FILE__}:#{__LINE__}"
           dev.unsent_notifications.each do |noty|
+            Rails.logger.error "        #{__FILE__}:#{__LINE__}"
             conn.write(noty.message_for_sending)
+            Rails.logger.error "        #{__FILE__}:#{__LINE__}"
             noty.sent_at = Time.now
+            Rails.logger.error "        #{__FILE__}:#{__LINE__}"
             noty.save
+            Rails.logger.error "        #{__FILE__}:#{__LINE__}"
           end
         end
       end
@@ -157,7 +162,7 @@ class APN::App < APN::Base
   
   def self.log_connection_exception(ex)
     ex.extend(APN::Errors)
-    Rails.logger.error "APN Exception: #{ex.class} - #{ex.message}"
+    Rails.logger.error "APN Exception: #{ex.class} - #{ex.message}\n#{ex.backtrace}"
   end
 
   protected
