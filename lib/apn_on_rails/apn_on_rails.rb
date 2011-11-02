@@ -35,7 +35,6 @@ module APN # :nodoc:
       rescue => ex
         raise APN::Errors::ConfigFileMissingEnvironment.new(ex.message)
       end
-      puts "initialized APN"
     end
   end
 
