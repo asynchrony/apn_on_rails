@@ -59,11 +59,15 @@ class APN::App < APN::Base
     end
     begin
       APN::Connection.open_for_delivery({:cert => the_cert}) do |conn, sock|
-        APN::Device.where(conditions).each do |dev|
-          dev.unsent_notifications.each do |noty|
-            conn.write(noty.message_for_sending)
-            noty.sent_at = Time.now
-            noty.save
+        APN::Device.where(conditions).each do |device|
+          device.unsent_notifications.each do |notification|
+            conn.write(notification.message_for_sending)
+            notification.update_attributes(:sent_at => Time.now)
+            if notification.valid?
+              Rails.logger.info "Sent APN notification: #{notification.inspect}"
+            else
+              Rails.logger.error "Could not update APN notification: #{notification.errors}"
+            end
           end
         end
       end
@@ -79,12 +83,12 @@ class APN::App < APN::Base
     end
     unless self.unsent_group_notifications.nil? || self.unsent_group_notifications.empty? 
       APN::Connection.open_for_delivery({:cert => self.cert}) do |conn, sock|
-        unsent_group_notifications.each do |gnoty|
-          gnoty.devices.all.each do |device|
-            conn.write(gnoty.message_for_sending(device))
+        unsent_group_notifications.each do |group_notification|
+          group_notification.devices.all.each do |device|
+            conn.write(group_notification.message_for_sending(device))
           end
-          gnoty.sent_at = Time.now
-          gnoty.save
+          group_notification.sent_at = Time.now
+          group_notification.save
         end
       end
     end
