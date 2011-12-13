@@ -17,4 +17,4 @@ end
 
 
 gem "actionpack", '~> 3.0'
-gem 'mongoid', '~> 2.1.9'
+gem 'mongoid', '~> 2.2'
