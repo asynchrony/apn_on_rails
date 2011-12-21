@@ -24,7 +24,7 @@ class APN::Notification < APN::Base
   field :badge, :type => Integer
   field :sound, :type => String
   field :alert, :type => String
-  field :sent_at, :type => Date
+  field :sent_at, :type => DateTime
   field :custom_properties, :type => Hash
   field :errors_nb, :type => Integer
 
